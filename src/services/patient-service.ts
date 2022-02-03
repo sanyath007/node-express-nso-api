@@ -12,14 +12,18 @@ interface PatientWithPager {
 export default class PatientService implements BaseService<PatientWithPager, Patient> {
     db: Knex;
 
-    constructor(db: Knex) {
+    constructor(db: Knex, private tbName: string) {
         this.db = db;
+    }
+
+    get qb(): Knex.QueryBuilder {
+        return this.db(this.tbName);
     }
 
     getAll(params: any): Promise<PatientWithPager> {
         const { page, ...rest } = params;
         
-        return this.db('patient')
+        return this.qb
                     .select("*")
                     .orderBy("hn", "desc")
                     .paginate({
@@ -30,17 +34,21 @@ export default class PatientService implements BaseService<PatientWithPager, Pat
     }
 
     getById(hn: string): Promise<Patient> {
-        return this.db('patient')
+        return this.qb
                     .select("*")
                     .where("hn", hn)
                     .first();
     }
 
     store(data: Patient): Promise<Patient> {
-        return this.db.insert(data);
+        return this.qb.insert(data);
     }
 
-    update(hn: string, data: Patient): Promise<Patient> {
-        return this.db.where("hn", hn).update(data);
+    update(hn: string, data: Patient): Promise<number> {
+        return this.qb.where("hn", hn).update(data);
+    }
+
+    delete(id: any): Promise<boolean> {
+        return this.qb.where({ id }).delete();
     }
 }
