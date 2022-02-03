@@ -4,7 +4,7 @@ import PatientService from "../services/patient-service";
 import { dbHos } from '../config/database';
 
 const patientRouter = Router();
-const ctrl: PatientController = new PatientController(new PatientService(dbHos));
+const ctrl: PatientController = new PatientController(new PatientService(dbHos, 'patient'));
 
 patientRouter.get("/", ctrl.getPatients);
 patientRouter.get("/:hn", ctrl.getPatient);
