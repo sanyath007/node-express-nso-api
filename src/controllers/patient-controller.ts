@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
+import { Patient } from '../models/Patient';
 import { BaseService } from '../services/BaseService';
 
 class PatientController {
-    constructor(private patientService: BaseService) {}
+    constructor(private patientService: BaseService<any, Patient>) {}
 
     public getPatients = async (req: Request, res: Response): Promise<void> => {
         const { pagination, data } = await this.patientService.getAll(req.query);
