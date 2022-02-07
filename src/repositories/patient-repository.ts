@@ -1,26 +1,20 @@
 import { Knex } from 'knex';
-import { IWithPagination } from 'knex-paginate';
-import { Pager } from '../models/Pager';
 import { Patient } from '../models/Patient';
-import { BaseService } from './BaseService';
+import { PatientWithPager } from '../models/PatientWithPager';
+import { BaseRepository } from './base-repository';
 
-interface PatientWithPager {
-    data: Patient[];
-    pagination: Pager;
-}
-
-export default class PatientService implements BaseService<PatientWithPager, Patient> {
-    db: Knex;
+export default class PatientRepository implements BaseRepository<PatientWithPager, Patient> {
+    private readonly db: Knex;
 
     constructor(db: Knex, private tbName: string) {
         this.db = db;
     }
 
-    get qb(): Knex.QueryBuilder {
+    public get qb(): Knex.QueryBuilder {
         return this.db(this.tbName);
     }
 
-    getAll(params: any): Promise<PatientWithPager> {
+    public getAll(params: any): Promise<PatientWithPager> {
         const { page, ...rest } = params;
         
         return this.qb
@@ -33,22 +27,22 @@ export default class PatientService implements BaseService<PatientWithPager, Pat
                     });
     }
 
-    getById(hn: string): Promise<Patient> {
+    public getById(hn: string): Promise<Patient> {
         return this.qb
                     .select("*")
                     .where("hn", hn)
                     .first();
     }
 
-    store(data: Patient): Promise<Patient> {
+    public store(data: Patient): Promise<Patient> {
         return this.qb.insert(data);
     }
 
-    update(hn: string, data: Patient): Promise<number> {
+    public update(hn: string, data: Patient): Promise<number> {
         return this.qb.where("hn", hn).update(data);
     }
 
-    delete(id: any): Promise<boolean> {
+    public delete(id: any): Promise<boolean> {
         return this.qb.where({ id }).delete();
     }
 }

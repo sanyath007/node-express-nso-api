@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
 import { Patient } from '../models/Patient';
-import { BaseService } from '../services/BaseService';
+import { PatientWithPager } from '../models/PatientWithPager';
+import { BaseRepository } from '../repositories/base-repository';
 
 class PatientController {
-    constructor(private patientService: BaseService<any, Patient>) {}
+    constructor(private model: BaseRepository<PatientWithPager, Patient>) {}
 
     public getPatients = async (req: Request, res: Response): Promise<void> => {
-        const { pagination, data } = await this.patientService.getAll(req.query);
+        const { pagination, data } = await this.model.getAll(req.query);
         
         if (data) {
             res.status(200).json({ patients: data, pager: pagination });
@@ -16,7 +17,7 @@ class PatientController {
     }
 
     public getPatient = async (req: Request, res: Response): Promise<void> => {
-        const patient = await this.patientService.getById(req.params.hn);
+        const patient = await this.model.getById(req.params.hn);
         
         if (patient) {
             res.status(200).json({ patient });

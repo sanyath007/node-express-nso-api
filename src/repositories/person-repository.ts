@@ -1,6 +1,6 @@
 import { dbPerson } from "../config/database"
 
-export default class PersonService {
+export default class PersonRepository {
     async getAll(): Promise<any[]> {
         return await dbPerson('personal')
                         .select('*')

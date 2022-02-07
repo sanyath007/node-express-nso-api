@@ -1,8 +1,8 @@
 import { dbPerson } from "../config/database";
 
-export default class UserService {
-    async authenticate(username: string, password: string): Promise<any> {
-        return await dbPerson('personal')
+export default class UserRepository {
+    authenticate(username: string, password: string): Promise<any> {
+        return dbPerson('personal')
                         .select('*')
                         .where('person_username', username)
                         .where('person_password', password);

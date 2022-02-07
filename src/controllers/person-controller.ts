@@ -1,16 +1,16 @@
 import express, { Request, Response, NextFunction } from 'express';
-import PersonService from '../services/person-service';
+import PersonRepository from '../repositories/person-repository';
 
 /**
  * Controller Definitions
  */
 export const personRouter = express.Router();
-const personService = new PersonService();
+const personRepository = new PersonRepository();
 
 // GET persons
 personRouter.get("/", async (req: Request, res: Response) => {
     try {
-        const persons = await personService.getAll();
+        const persons = await personRepository.getAll();
 
         if (!persons || persons.length <= 0) {
             res.status(404).send("Persons is empty!!")
@@ -25,7 +25,7 @@ personRouter.get("/", async (req: Request, res: Response) => {
 // GET persons/:id
 personRouter.get("/:id", async (req: Request, res: Response) => {
     try {
-        const person = await personService.getById(req.params.id);
+        const person = await personRepository.getById(req.params.id);
         console.log(person);
 
         if (!person || person.length <= 0) {
