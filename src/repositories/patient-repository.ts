@@ -1,17 +1,12 @@
 import { Knex } from 'knex';
 import { Patient } from '../models/Patient';
 import { PatientWithPager } from '../models/PatientWithPager';
-import { BaseRepository } from './base-repository';
+import { IBaseRepository } from './base-repository';
+import { KnexDbContext } from './KnexDbContext';
 
-export default class PatientRepository implements BaseRepository<PatientWithPager, Patient> {
-    private readonly db: Knex;
-
-    constructor(db: Knex, private tbName: string) {
-        this.db = db;
-    }
-
-    public get qb(): Knex.QueryBuilder {
-        return this.db(this.tbName);
+export default class PatientRepository extends KnexDbContext implements IBaseRepository<PatientWithPager, Patient> {
+    constructor(db: Knex, tbName: string) {
+        super(db, tbName);
     }
 
     public getAll(params: any): Promise<PatientWithPager> {

@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 import { Patient } from '../models/Patient';
 import { PatientWithPager } from '../models/PatientWithPager';
-import { BaseRepository } from '../repositories/base-repository';
+import { IBaseRepository } from '../repositories/base-repository';
 
 class PatientController {
-    constructor(private model: BaseRepository<PatientWithPager, Patient>) {}
+    constructor(private model: IBaseRepository<PatientWithPager, Patient>) {}
 
     public getPatients = async (req: Request, res: Response): Promise<void> => {
         const { pagination, data } = await this.model.getAll(req.query);
